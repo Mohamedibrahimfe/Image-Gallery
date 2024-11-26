@@ -1,19 +1,18 @@
 import fetchImages from "@/lib/fetchImages";
-import type { Image } from "@/models/Images";
+import { ImageResults } from "@/models/Images";
+import Image from "next/image";
 
 export default async function Gallery() {
-  const url = "https://api.pexels.com/vi/curated";
-  const images: Image | undefined = await fetchImages(url);
+  const url = "https://api.pexels.com/v1/curated";
+  const images: ImageResults | undefined = await fetchImages(url);
 
   if (!images)
     return <h2 className="m-4 text-2xl font-bold">No Images Foumd</h2>;
   return (
-    <section>
-      <ul>
-        {images.images.map((image) => (
-          <li key={image.id}>{image.image.large}</li>
-        ))}
-      </ul>
+    <section className="px-2 my-3 grid gap-2 grid-cols-gallery">
+      {images.photos.map((image) => (
+        <div key={image.id} className="h-64 bg-gray-200 rounded-xl "></div>
+      ))}
     </section>
   );
 }

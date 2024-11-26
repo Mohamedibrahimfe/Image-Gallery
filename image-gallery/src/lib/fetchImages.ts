@@ -1,25 +1,15 @@
-import type { Images } from "@/models/Images";
-import { imageSchemaWithPage } from "@/models/Images";
-import env from "./env";
-export default async function fetchImages(
-  url: string
-): Promise<Images | undefined> {
+import axios from "axios";
+import { ImageResults } from "../models/Images";
+export default async function fetchImages(url: string) {
   try {
-    const res = await fetch(url, {
+    const response = await axios.get(url, {
       headers: {
-        Authorization: env.PEXELS_API_KEY,
+        Authorization: process.env.PEXELS_API_KEY,
       },
     });
-    if (!res.ok) {
-      throw new Error("fetch images error!\n");
-    }
-    const images: Images = await res.json();
-    console.log(images);
-
-    const parsedData = imageSchemaWithPage.parse(Image);
-    if ((parsedData.total_results = 0)) return undefined;
-    return parsedData;
-  } catch (e) {
-    if (e instanceof Error) console.log(e.stack);
+    return response.data as ImageResults;
+  } catch (error) {
+    console.error("Error fetching images:", error);
+    return null;
   }
 }
