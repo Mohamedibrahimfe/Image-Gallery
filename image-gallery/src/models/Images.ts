@@ -27,4 +27,4 @@ export const imageSchemaWithPage = basicImageSchema.extend({
 
 export type ImageResults = z.infer<typeof imageSchemaWithPage>;
 
-export type photos = z.infer<typeof photoSchema>;
+export type photo = z.infer<typeof photoSchema>;

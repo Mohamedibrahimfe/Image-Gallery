@@ -1,17 +1,22 @@
 import fetchImages from "@/lib/fetchImages";
 import { ImageResults } from "@/models/Images";
-import Image from "next/image";
+import ImgContainer from "./ImgContainer";
 
-export default async function Gallery() {
-  const url = "https://api.pexels.com/v1/curated";
+type Props = {
+  topic?: string;
+};
+export default async function Gallery({ topic }: Props) {
+  const url = !topic
+    ? `https://api.pexels.com/v1/curated`
+    : `https://api.pexels.com/v1/search?query=${topic}`;
   const images: ImageResults | undefined = await fetchImages(url);
 
   if (!images)
     return <h2 className="m-4 text-2xl font-bold">No Images Foumd</h2>;
   return (
-    <section className="px-2 my-3 grid gap-2 grid-cols-gallery">
+    <section className="px-2 my-3 grid gap-2 grid-cols-gallery auto-rows-[10px]">
       {images.photos.map((image) => (
-        <div key={image.id} className="h-64 bg-gray-200 rounded-xl "></div>
+        <ImgContainer key={image.id} photo={image} />
       ))}
     </section>
   );
